@@ -1,4 +1,4 @@
-#' Distance between meshes
+#' Distance between regional meshes
 #'
 #' If \code{mesh} and \code{mesh_to} are both vectors, the distance between \code{mesh} and \code{mesh_to} is calculated.
 #' If \code{mesh} is a list, The path distance of each element is calculated.
@@ -23,7 +23,7 @@ mesh_distance <- function(mesh, mesh_to,
                            n_Y = field(mesh, "n_Y"),
                            n_Y_to = field(mesh_to, "n_Y"))
 
-    length_X <- size / 80000
+    length_X <- size / 80000L
     length_Y <- length_X / 1.5
 
     distance <- vec_unique(mesh)
@@ -45,7 +45,7 @@ mesh_distance <- function(mesh, mesh_to,
                        by = c("diff_n_X", "n_Y", "n_Y_to")) %>%
       purrr::chuck("distance")
   } else {
-    stopifnot(is_list(mesh),
+    stopifnot(is.list(mesh),
               missing(mesh_to))
     arg_match(type, c("keep_na", "ignore_na", "skip_na"))
 
@@ -57,10 +57,10 @@ mesh_distance <- function(mesh, mesh_to,
         }
 
         if (close) {
-          mesh_to <- c(utils::tail(mesh, -1), mesh[1])
+          mesh_to <- c(utils::tail(mesh, -1L), mesh[1L])
         } else {
-          mesh_to <- utils::tail(mesh, -1)
-          mesh <- utils::head(mesh, -1)
+          mesh_to <- utils::tail(mesh, -1L)
+          mesh <- utils::head(mesh, -1L)
         }
 
         mesh_distance(mesh, mesh_to) %>%

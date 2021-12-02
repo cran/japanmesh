@@ -1,9 +1,8 @@
 #' Conversion between mesh and coordinates (longitude and latitude)
 #'
 #' @name XY
+NULL
 
-#' @export
-#'
 #' @rdname XY
 #'
 #' @param X A numeric vector of longitude.
@@ -11,29 +10,31 @@
 #' @param size A mesh size.
 #'
 #' @return \code{XY_to_mesh} returns a \code{mesh} class vector.
+#'
+#' @export
 XY_to_mesh <- function(X, Y, size) {
   size <- size_match(size)
 
-  length_X <- size / 80000
+  length_X <- size / 80000L
   length_Y <- length_X / 1.5
 
-  new_mesh(n_X = (X - 100) %/% length_X,
-           n_Y = Y %/% length_Y,
-           size = size)
+  new_mesh(size = size,
+           n_X = (X - 100) %/% length_X,
+           n_Y = Y %/% length_Y)
 }
 
-#' @export
-#'
 #' @rdname XY
 #'
 #' @param mesh A \code{mesh} class vector.
 #' @param center Should the center point of the mesh be returned? Otherwise the end points will be returned. \code{TRUE} by default.
 #'
 #' @return \code{mesh_to_XY} returns a \code{tbl_df}.
+#'
+#' @export
 mesh_to_XY <- function(mesh, center = TRUE) {
   stopifnot(is_mesh(mesh))
 
-  length_X <- mesh_size(mesh) / 80000
+  length_X <- mesh_size(mesh) / 80000L
   length_Y <- length_X / 1.5
 
   n_X <- field(mesh, "n_X")

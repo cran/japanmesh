@@ -1,4 +1,4 @@
-#' Draw line segments between meshes
+#' Draw line segments between regional meshes
 #'
 #' If \code{mesh} and \code{mesh_to} are both vectors, the line between \code{mesh} and \code{mesh_to} is drawn (using Bresenham's line algorithm).
 #' If \code{mesh} is a list, The path lines for each element in the mesh will be drawn.
@@ -37,8 +37,8 @@ mesh_line <- function(mesh, mesh_to,
     dy <- abs(y_to - y)
     err <- dx - dy
 
-    sx <- dplyr::if_else(x < x_to, 1, -1)
-    sy <- dplyr::if_else(y < y_to, 1, -1)
+    sx <- dplyr::if_else(x < x_to, 1L, -1L)
+    sy <- dplyr::if_else(y < y_to, 1L, -1L)
 
     line$line <- list(x, y, x_to, y_to, dx, dy, err, sx, sy) %>%
       purrr::pmap(function(x, y, x_to, y_to, dx, dy, err, sx, sy) {
@@ -51,7 +51,7 @@ mesh_line <- function(mesh, mesh_to,
           ys <- y
 
           while (x != x_to || y != y_to) {
-            err_2 <- err * 2
+            err_2 <- err * 2L
             if (err_2 >= -dy) {
               err <- err - dy
               x <- x + sx
@@ -74,7 +74,7 @@ mesh_line <- function(mesh, mesh_to,
                        by = c("mesh", "mesh_to")) %>%
       purrr::chuck("line")
   } else {
-    stopifnot(is_list(mesh),
+    stopifnot(is.list(mesh),
               missing(mesh_to))
 
     mesh %>%
@@ -85,10 +85,10 @@ mesh_line <- function(mesh, mesh_to,
         }
 
         if (close) {
-          mesh_to <- c(utils::tail(mesh, -1), mesh[1])
+          mesh_to <- c(utils::tail(mesh, -1L), mesh[1L])
         } else {
-          mesh_to <- utils::tail(mesh, -1)
-          mesh <- utils::head(mesh, -1)
+          mesh_to <- utils::tail(mesh, -1L)
+          mesh <- utils::head(mesh, -1L)
         }
 
         mesh_line(mesh, mesh_to) %>%
